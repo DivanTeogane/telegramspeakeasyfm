@@ -15,7 +15,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at top, #1e1b4b 0%, #09090b 100%);
+      background: radial-gradient(circle at top, #4b1b1b 0%, #090b09 100%);
       color: #ffffff;
       display: flex;
       flex-direction: column;
@@ -65,7 +65,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #537593, #DEB887);
+      background: linear-gradient(135deg, #937f53, #DEB887);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -79,7 +79,7 @@
 
     .status {
       font-size: 12px;
-      color: #a1a1aa;
+      color: #aaa9a1;
       margin-bottom: 18px;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -98,7 +98,7 @@
       height: 64px;
       border-radius: 50%;
       border: none;
-      background: linear-gradient(135deg, #537593, #DEB887);
+      background: linear-gradient(135deg, #937453, #DEB887);
       color: #fff;
       font-size: 24px;
       cursor: pointer;
@@ -118,7 +118,7 @@
     .chat-header {
       font-size: 14px;
       font-weight: 600;
-      color: #e4e4e7;
+      color: #e7e4e4;
       margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
@@ -166,10 +166,10 @@
       font-size: 14px;
       outline: none;
     }
-    .chat-input:focus { border-color: #465847; }
+    .chat-input:focus { border-color: #585246; }
 
     .send-btn {
-      background: linear-gradient(135deg, #537593, #DEB887);
+      background: linear-gradient(135deg, #936353, #DEB887);
       border: none;
       border-radius: 14px;
       padding: 0 16px;
@@ -184,7 +184,7 @@
   <div class="player-card">
     <div class="vinyl-wrap">
       <div class="vinyl" id="vinyl">
-        <div class="vinyl-label">🎧</div>
+        <div class="vinyl-label">☏</div>
       </div>
     </div>
 
@@ -194,11 +194,11 @@
     <audio id="radioStream" preload="none"></audio>
 
     <div class="controls-row">
-      <button class="play-btn" id="playBtn">▶</button>
+      <button class="play-btn" id="playBtn">▷</button>
       <div class="volume-wrap">
-        <span>🔈</span>
+        <span>-</span>
         <input type="range" id="volume" min="0" max="1" step="0.05" value="0.85" />
-        <span>🔊</span>
+        <span>+</span>
       </div>
     </div>
   </div>
