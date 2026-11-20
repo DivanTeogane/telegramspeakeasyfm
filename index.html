@@ -217,20 +217,53 @@
 
   <script>
     const tg = window.Telegram?.WebApp;
-    let userName = "Слушатель";
-    let userUsername = "";
-
     if (tg) {
       tg.ready();
       tg.expand();
       tg.setHeaderColor("#1e1b4b");
-      const user = tg.initDataUnsafe?.user;
-      if (user) {
-        userName = user.first_name + (user.username ? ` (@${user.username})` : "");
-        userUsername = user.username || "";
-      }
     }
-    document.getElementById("userNameLabel").textContent = userName;
+
+    // Генерация рандомного ника и цвета, если пользователь ещё не задал свой
+    const adj = ["Ночной", "Неоновый", "Виниловый", "Ламповый", "Космический", "Тайный", "Джазовый", "Секретный"];
+    const nouns = ["Слушатель", "Диджей", "Странник", "Фантом", "Меломан", "Пират", "Гость", "Волк"];
+    const colors = ["#c084fc", "#f472b6", "#38bdf8", "#4ade80", "#fbbf24", "#fb7185", "#a78bfa"];
+
+    let userName = localStorage.getItem("radio_nick");
+    let userColor = localStorage.getItem("radio_color");
+
+    if (!userName) {
+      const rAdj = adj[Math.floor(Math.random() * adj.length)];
+      const rNoun = nouns[Math.floor(Math.random() * nouns.length)];
+      const rNum = Math.floor(100 + Math.random() * 900);
+      userName = `${rAdj} ${rNoun} #${rNum}`;
+      localStorage.setItem("radio_nick", userName);
+    }
+
+    if (!userColor) {
+      userColor = colors[Math.floor(Math.random() * colors.length)];
+      localStorage.setItem("radio_color", userColor);
+    }
+
+    const userLabel = document.getElementById("userNameLabel");
+    userLabel.style.cursor = "pointer";
+    userLabel.style.color = userColor;
+    userLabel.title = "Нажми, чтобы изменить ник";
+    userLabel.textContent = `✏️ ${userName}`;
+
+    // Смена ника и цвета по клику на свой ник в шапке чата
+    userLabel.addEventListener("click", () => {
+      const newNick = prompt("Введи свой ник для чата (до 20 символов):", userName);
+      if (newNick && newNick.trim()) {
+        userName = newNick.trim().slice(0, 20);
+        // Меняем цвет на следующий из палитры при смене ника
+        userColor = colors[(colors.indexOf(userColor) + 1) % colors.length];
+        localStorage.setItem("radio_nick", userName);
+        localStorage.setItem("radio_color", userColor);
+        userLabel.textContent = `✏️ ${userName}`;
+        userLabel.style.color = userColor;
+      }
+    });
+
 
 
     // Ссылка на радиопоток (потом замените на свою из Caster.fm)
