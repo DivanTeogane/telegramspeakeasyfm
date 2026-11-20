@@ -214,29 +214,57 @@
       <button type="submit" class="send-btn">➤</button>
     </form>
   </div>
-
   <script>
     const tg = window.Telegram?.WebApp;
-    let userName = "Слушатель";
-    let userUsername = "";
-
     if (tg) {
       tg.ready();
       tg.expand();
       tg.setHeaderColor("#1e1b4b");
-      const user = tg.initDataUnsafe?.user;
-      if (user) {
-        userName = user.first_name + (user.username ? ` (@${user.username})` : "");
-        userUsername = user.username || "";
-      }
     }
-    document.getElementById("userNameLabel").textContent = userName;
 
+    // Генерация рандомного ника и цвета, если пользователь ещё не задал свой
+    const adj = ["Ночной", "Неоновый", "Виниловый", "Ламповый", "Космический", "Тайный", "Джазовый", "Секретный"];
+    const nouns = ["Слушатель", "Диджей", "Странник", "Фантом", "Меломан", "Пират", "Гость", "Волк"];
+    const colors = ["#c084fc", "#f472b6", "#38bdf8", "#4ade80", "#fbbf24", "#fb7185", "#a78bfa"];
 
-    // Ссылка на радиопоток (потом замените на свою из Caster.fm)
+    let userName = localStorage.getItem("radio_nick");
+    let userColor = localStorage.getItem("radio_color");
+
+    if (!userName) {
+      const rAdj = adj[Math.floor(Math.random() * adj.length)];
+      const rNoun = nouns[Math.floor(Math.random() * nouns.length)];
+      const rNum = Math.floor(100 + Math.random() * 900);
+      userName = `${rAdj} ${rNoun} #${rNum}`;
+      localStorage.setItem("radio_nick", userName);
+    }
+
+    if (!userColor) {
+      userColor = colors[Math.floor(Math.random() * colors.length)];
+      localStorage.setItem("radio_color", userColor);
+    }
+
+    const userLabel = document.getElementById("userNameLabel");
+    userLabel.style.cursor = "pointer";
+    userLabel.style.color = userColor;
+    userLabel.title = "Нажми, чтобы изменить ник";
+    userLabel.textContent = `✏️ ${userName}`;
+
+    // Смена ника и цвета по клику на свой ник в шапке чата
+    userLabel.addEventListener("click", () => {
+      const newNick = prompt("Введи свой ник для чата (до 20 символов):", userName);
+      if (newNick && newNick.trim()) {
+        userName = newNick.trim().slice(0, 20);
+        // Меняем цвет на следующий из палитры при смене ника
+        userColor = colors[(colors.indexOf(userColor) + 1) % colors.length];
+        localStorage.setItem("radio_nick", userName);
+        localStorage.setItem("radio_color", userColor);
+        userLabel.textContent = `✏️ ${userName}`;
+        userLabel.style.color = userColor;
+      }
+    });
+
     const STREAM_URL = "https://radioparadise.com";
-    // Ваша база данных Firebase для чата (уже вставлена)
-    const DB_URL = "https://speafmchat-default-rtdb.europe-west1.firebasedatabase.app";
+    const DB_URL = "https://firebasedatabase.app";
 
     const audio = document.getElementById("radioStream");
     const playBtn = document.getElementById("playBtn");
@@ -278,7 +306,7 @@
 
     function escapeHtml(text) {
       const div = document.createElement("div");
-      div.textContent = text;
+      div.textContent = text || "";
       return div.innerHTML;
     }
 
@@ -290,7 +318,7 @@
 
         const html = Object.values(data).map(m => `
           <div class="msg">
-            <div class="msg-author">${escapeHtml(m.author)}</div>
+            <div class="msg-author" style="color: ${escapeHtml(m.color || '#c084fc')}">${escapeHtml(m.author)}</div>
             <div>${escapeHtml(m.text)}</div>
           </div>
         `).join("");
@@ -311,7 +339,7 @@
       chatInput.value = "";
       await fetch(`${DB_URL}/messages.json`, {
         method: "POST",
-        body: JSON.stringify({ author: userName, text, time: Date.now() })
+        body: JSON.stringify({ author: userName, color: userColor, text, time: Date.now() })
       });
       loadMessages();
     });
@@ -319,5 +347,6 @@
     loadMessages();
     setInterval(loadMessages, 2500);
   </script>
+
 </body>
 </html>
