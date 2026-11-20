@@ -218,6 +218,7 @@
   <script>
     const tg = window.Telegram?.WebApp;
     let userName = "Слушатель";
+    let userUsername = "";
 
     if (tg) {
       tg.ready();
@@ -226,9 +227,11 @@
       const user = tg.initDataUnsafe?.user;
       if (user) {
         userName = user.first_name + (user.username ? ` (@${user.username})` : "");
+        userUsername = user.username || "";
       }
     }
     document.getElementById("userNameLabel").textContent = userName;
+
 
     // Ссылка на радиопоток (потом замените на свою из Caster.fm)
     const STREAM_URL = "https://radioparadise.com";
