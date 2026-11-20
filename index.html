@@ -209,10 +209,10 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      tg.setHeaderColor("#1e1b4b");
+      tg.setHeaderColor("#4b1b1b");
     }
 
-    // Генерация рандомного ника и цвета, если пользователь ещё не задал свой
+    // Генерация рандомного ника и цвета
     const adj = ["Night", "Wet", "Dry", "Ritzy", "Keen", "Dolled up", "Ossified", "Bum"];
     const nouns = ["Sheik", "Cake-eater", "Drugstore cowboy", "Bootlegger", "Torpedo", "Jellybean", "Card", "Live wire"];
     const colors = ["#800000", "#FFC0CB", "#FFE4E1", "#B0E0E6", "#98FB98", "#EEE8AA", "#BC8F8F"];
@@ -239,12 +239,11 @@
     userLabel.title = "Нажми, чтобы изменить ник";
     userLabel.textContent = `✏️ ${userName}`;
 
-    // Смена ника и цвета по клику на свой ник в шапке чата
+    // Смена ника и цвета по клику
     userLabel.addEventListener("click", () => {
       const newNick = prompt("Введи свой ник для чата (до 20 символов):", userName);
       if (newNick && newNick.trim()) {
         userName = newNick.trim().slice(0, 20);
-        // Меняем цвет на следующий из палитры при смене ника
         userColor = colors[(colors.indexOf(userColor) + 1) % colors.length];
         localStorage.setItem("radio_nick", userName);
         localStorage.setItem("radio_color", userColor);
@@ -253,45 +252,8 @@
       }
     });
 
-
-
-    // Ссылка на радиопоток (потом замените на свою из Caster.fm)
-    const STREAM_URL = "https://radioparadise.com";
-    // Ваша база данных Firebase для чата (уже вставлена)
+    // Ваша база данных Firebase для чата
     const DB_URL = "https://speafmchat-default-rtdb.europe-west1.firebasedatabase.app";
-
-    const audio = document.getElementById("radioStream");
-    const playBtn = document.getElementById("playBtn");
-    const statusEl = document.getElementById("status");
-    const volumeEl = document.getElementById("volume");
-    const vinyl = document.getElementById("vinyl");
-
-    let isPlaying = false;
-    audio.volume = volumeEl.value;
-
-    playBtn.addEventListener("click", () => {
-      if (!isPlaying) {
-        statusEl.textContent = "⚝ Подключение...";
-        audio.src = STREAM_URL + "?t=" + Date.now();
-        audio.play().then(() => {
-          isPlaying = true;
-          playBtn.textContent = "⏸";
-          statusEl.textContent = "● В эфире";
-          statusEl.classList.add("live");
-          vinyl.classList.add("playing");
-        }).catch(() => statusEl.textContent = "Ошибка потока");
-      } else {
-        audio.pause();
-        audio.src = "";
-        isPlaying = false;
-        playBtn.textContent = "▶";
-        statusEl.textContent = "На паузе";
-        statusEl.classList.remove("live");
-        vinyl.classList.remove("playing");
-      }
-    });
-
-    volumeEl.addEventListener("input", (e) => audio.volume = e.target.value);
 
     const chatMessages = document.getElementById("chatMessages");
     const chatForm = document.getElementById("chatForm");
@@ -300,7 +262,7 @@
 
     function escapeHtml(text) {
       const div = document.createElement("div");
-      div.textContent = text;
+      div.textContent = text || "";
       return div.innerHTML;
     }
 
@@ -312,7 +274,7 @@
 
         const html = Object.values(data).map(m => `
           <div class="msg">
-            <div class="msg-author">${escapeHtml(m.author)}</div>
+            <div class="msg-author" style="color: ${escapeHtml(m.color || '#DEB887')}">${escapeHtml(m.author || 'Слушатель')}</div>
             <div>${escapeHtml(m.text)}</div>
           </div>
         `).join("");
@@ -333,7 +295,7 @@
       chatInput.value = "";
       await fetch(`${DB_URL}/messages.json`, {
         method: "POST",
-        body: JSON.stringify({ author: userName, text, time: Date.now() })
+        body: JSON.stringify({ author: userName, color: userColor, text, time: Date.now() })
       });
       loadMessages();
     });
