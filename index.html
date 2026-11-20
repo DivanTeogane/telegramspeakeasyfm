@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SPEAKEASY FM</title>
+  <title>SPEAKEASY 20s FM</title>
   <script src="https://telegram.org"></script>
   <style>
     :root {
-      --accent: #8b5cf6;
-      --accent-glow: rgba(139, 92, 246, 0.5);
+      --accent: #48ab78;
+      --accent-glow: rgba(0, 255, 187, 0.5);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,7 +65,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      background: linear-gradient(135deg, #537593, #507161);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,7 +98,7 @@
       height: 64px;
       border-radius: 50%;
       border: none;
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      background: linear-gradient(135deg, #537593, #507161);
       color: #fff;
       font-size: 24px;
       cursor: pointer;
@@ -113,7 +113,7 @@
       gap: 8px;
       flex: 1;
     }
-    input[type="range"] { width: 100%; accent-color: #a855f7; }
+    input[type="range"] { width: 100%; accent-color: #507161; }
 
     .chat-header {
       font-size: 14px;
@@ -147,7 +147,7 @@
     .msg-author {
       font-size: 11px;
       font-weight: 600;
-      color: #c084fc;
+      color: #528b5d;
       margin-bottom: 2px;
     }
 
@@ -166,10 +166,10 @@
       font-size: 14px;
       outline: none;
     }
-    .chat-input:focus { border-color: #a855f7; }
+    .chat-input:focus { border-color: #465847; }
 
     .send-btn {
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      background: linear-gradient(135deg, #537593, #507161);
       border: none;
       border-radius: 14px;
       padding: 0 16px;
@@ -205,7 +205,7 @@
 
   <div class="chat-card">
     <div class="chat-header">
-      <span>💬 Чат эфира</span>
+      <span>˙·٠•●Կᥲᴛ ϶ɸᥙρᥲ●•٠·˙</span>
       <span style="font-size: 11px; color: #a1a1aa;" id="userNameLabel">Гость</span>
     </div>
     <div class="chat-messages" id="chatMessages"></div>
@@ -249,7 +249,7 @@
 
     playBtn.addEventListener("click", () => {
       if (!isPlaying) {
-        statusEl.textContent = "Подключение...";
+        statusEl.textContent = "⚝ Подключение...";
         audio.src = STREAM_URL + "?t=" + Date.now();
         audio.play().then(() => {
           isPlaying = true;
